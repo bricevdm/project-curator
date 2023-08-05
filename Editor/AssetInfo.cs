@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEngine;
+
+#if USE_ADDRESSABLES
 using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
-using UnityEngine;
+#endif
 
 namespace Ogxd.ProjectCurator
 {
@@ -136,9 +139,13 @@ namespace Ogxd.ProjectCurator
         {
             get
             {
+#if USE_ADDRESSABLES
                 AddressableAssetSettings settings = AddressableAssetSettingsDefaultObject.Settings;
-                AddressableAssetEntry entry = settings.FindAssetEntry(AssetDatabase.AssetPathToGUID(path));
+                AddressableAssetEntry entry = settings?.FindAssetEntry(AssetDatabase.AssetPathToGUID(path));
                 return entry != null;
+#else 
+                return false;
+#endif
             }
         }
     }
