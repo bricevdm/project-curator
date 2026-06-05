@@ -51,6 +51,6 @@ namespace Ogxd.ProjectCurator
         }
 
         static GUIStyle _miniLabelAlignRight;
-        static GUIStyle MiniLabelAlignRight => _miniLabelAlignRight ??= new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight, richText = true};
+        static GUIStyle MiniLabelAlignRight => _miniLabelAlignRight ?? (_miniLabelAlignRight = new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleRight, richText = true});
     }
 }
