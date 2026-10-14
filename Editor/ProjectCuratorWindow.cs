@@ -62,7 +62,7 @@ namespace Ogxd.ProjectCurator
 
             AssetInfo selectedAssetInfo = ProjectCurator.GetAsset(selectedPath);
             if (selectedAssetInfo == null) {
-                if (selectedPath.StartsWith("Assets"))
+                if (selectedPath.StartsWith("Assets") || ProjectCuratorData.IncludePackages && selectedPath.StartsWith("Packages/"))
                 {
                     bool rebuildClicked = HelpBoxWithButton(new GUIContent("You must rebuild database to obtain information on this asset", EditorGUIUtility.IconContent("console.warnicon").image), new GUIContent("Rebuild Database"));
                     if (rebuildClicked)
@@ -117,14 +117,14 @@ namespace Ogxd.ProjectCurator
 
             GUILayout.EndScrollView();
 
-            if (!selectedAssetInfo.IsIncludedInBuild) {
-                bool deleteClicked = HelpBoxWithButton(new GUIContent("This asset is not referenced and never used. Would you like to delete it ?", EditorGUIUtility.IconContent("console.warnicon").image), new GUIContent("Delete Asset"));
-                if (deleteClicked) {
-                    File.Delete(selectedPath);
-                    AssetDatabase.Refresh();
-                    ProjectCurator.RemoveAssetFromDatabase(selectedPath);
-                }
-            }
+            //if (!selectedAssetInfo.IsIncludedInBuild) {
+            //    bool deleteClicked = HelpBoxWithButton(new GUIContent("This asset is not referenced and never used. Would you like to delete it ?", EditorGUIUtility.IconContent("console.warnicon").image), new GUIContent("Delete Asset"));
+            //    if (deleteClicked) {
+            //        File.Delete(selectedPath);
+            //        AssetDatabase.Refresh();
+            //        ProjectCurator.RemoveAssetFromDatabase(selectedPath);
+            //    }
+            //}
         }
 
         void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
@@ -132,6 +132,10 @@ namespace Ogxd.ProjectCurator
             menu.AddItem(new GUIContent("Rebuild Database"), false, ProjectCurator.RebuildDatabase);
             menu.AddItem(new GUIContent("Clear Database"), false, ProjectCurator.ClearDatabase);
             menu.AddItem(new GUIContent("Project Overlay"), ProjectWindowOverlay.Enabled, () => { ProjectWindowOverlay.Enabled = !ProjectWindowOverlay.Enabled; });
+            menu.AddItem(new GUIContent("Include Packages"), ProjectCuratorData.IncludePackages, () => {
+                ProjectCuratorData.IncludePackages = !ProjectCuratorData.IncludePackages;
+                ProjectCurator.RebuildDatabase();
+            });
         }
 
         public bool HelpBoxWithButton(GUIContent messageContent, GUIContent buttonContent)

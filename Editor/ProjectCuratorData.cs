@@ -14,6 +14,10 @@ namespace Ogxd.ProjectCurator
         public static bool IsUpToDate { get { return Instance.isUpToDate; } set { Instance.isUpToDate = value; } }
 
         [SerializeField]
+        private bool includePackages = false;
+        public static bool IncludePackages { get { return Instance.includePackages; } set { Instance.includePackages = value; } }
+
+        [SerializeField]
         private AssetInfo[] assetInfos;
         public static AssetInfo[] AssetInfos {
             get => Instance.assetInfos ?? (Instance.assetInfos = new AssetInfo[0]);

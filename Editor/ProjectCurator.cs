@@ -101,9 +101,10 @@ namespace Ogxd.ProjectCurator
             var allAssetPaths = AssetDatabase.GetAllAssetPaths();
 
             // Ignore non-assets (built-in resources, Library, etc.) and directories.
-            // Include both Assets/ and Packages/ so references to/from in-project packages
+            // Optionally include Packages/ so references to/from in-project packages
             // (e.g. shaders living under Packages/) are tracked.
-            allAssetPaths = allAssetPaths.Where(x => (x.StartsWith("Assets/") || x.StartsWith("Packages/")) && !Directory.Exists(x)).ToArray();
+            bool includePackages = ProjectCuratorData.IncludePackages;
+            allAssetPaths = allAssetPaths.Where(x => (x.StartsWith("Assets/") || includePackages && x.StartsWith("Packages/")) && !Directory.Exists(x)).ToArray();
 
             EditorUtility.DisplayProgressBar("Building Dependency Database", "Gathering All Assets...", 0f);
 
